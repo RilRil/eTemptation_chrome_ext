@@ -1,14 +1,17 @@
 {
     "manifest_version": 2,
     "name": "eTemptation Chrome Extension",
-    "version": "0.0.1",
+    "version": "0.0.4",
     "content_scripts": [
         {
             "matches": [
+                "http://localhost:*/",
+                "file://*",
                 "http://*/webquartz/eQuartz/*"
             ],
             "js": [
-                "content.js"
+                "main.js",
+                "lib.js"
             ],
             "css": [ 
                 "style.css"
