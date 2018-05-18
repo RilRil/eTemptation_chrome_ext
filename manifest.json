@@ -5,16 +5,16 @@
     "content_scripts": [
         {
             "matches": [
-                "http://localhost:*/",
-                "file://*",
+                "file:///*/eTemp-chrome-ext/*",
                 "http://*/webquartz/eQuartz/*"
             ],
             "js": [
-                "main.js",
-                "lib.js"
+                "style.js",
+                "lib.js",
+                "main.js"
             ],
             "css": [ 
-                "style.css"
+                "overrideStyles.css"
             ]
         }
     ]
