@@ -28,6 +28,12 @@ function loadExt() {
 		workingTime = subTime(TIME_NOW, data[0]);
 		rest = subTime(MINIMUM_TIME_TO_WORK, workingTime);
 		timeHome = addTime(TIME_NOW, addTime(rest, chillinTime));
+		allIntervals.push({
+			start: data[0],
+			end: TIME_NOW,
+			interval: subTime(TIME_NOW, data[0]),
+			thisIsWork: true
+		});
 	} else if (data.length > 1) {
 
 		data.forEach((datum, key) => {
@@ -68,7 +74,7 @@ function loadExt() {
 		// console.table(works);
 		// console.table(breaks);
 		// console.log('all intervals : ', allIntervals);
-
+		workingTime.inMin = translateTimeToMin(workingTime);
 		biggestBreak = translateMinToTime(biggestBreakInMin);
 		rest = subTime(MINIMUM_TIME_TO_WORK, workingTime);
 		if (rest.sign === '-') {
@@ -92,11 +98,12 @@ function loadExt() {
 		let container = document.createElement('div');
 		container.classList = ['etemp-chrome-ext'];
 
-		let HTMLPart1 = drawTimeline(allIntervals);
-		let HTMLPart2 = `
+		let html = ''; 
+		html += drawWorkBar(workingTime, rest);
+		html += drawTimeline(allIntervals);
+		html += `
+		<hr>
 		<div>
-			<p>Worked : ${workingTime.hour}h ${workingTime.min}min | Remaining : ${rest.sign} ${rest.hour}h ${rest.min}min </p>
-			<hr />
 			<p>1h hour break for lunch ?? ${lunchBreakOK ? 'YAY' : 'NOPE'}</p>
 			<p>Biggest break : ${biggestBreak.hour}h ${biggestBreak.min}min</p>
 			<p>Total break time : ${breakTime.hour}h ${breakTime.min}min</p>
@@ -105,28 +112,45 @@ function loadExt() {
 		</div>
 		`;
 
-		container.innerHTML = HTMLPart1 + HTMLPart2;
+		container.innerHTML = html;
 		document.body.appendChild(container)
 	}
 }
 
+function drawWorkBar(workingTime, remainingTime) {
+	let bar1Width = workingTime.inMin > MINIMUM_TIME_TO_WORK.inMin ? TIMELINE_WIDTH : (workingTime.inMin / MINIMUM_TIME_TO_WORK.inMin * TIMELINE_WIDTH);
+	let bar1 = `<div class="bar work-bar-work" style="width: ${bar1Width}px">${displayTime(workingTime, true)} worked</div>`;
+
+	let bar2Width = TIMELINE_WIDTH - bar1Width;
+	let bar2Text = 'remaining';
+	if (workingTime.inMin > MINIMUM_TIME_TO_WORK.inMin) {
+		bar2Width = remainingTime.inMin / MINIMUM_TIME_TO_WORK.inMin * TIMELINE_WIDTH;
+		bar2Text = 'overtime';
+	}
+	let bar2 = `<div class="bar work-bar-${bar2Text}" style="width: ${bar2Width}px">${displayTime(remainingTime, true)} ${bar2Text}</div>`;
+	
+	return `
+	<div class="work-bar-container">
+	  <div class="work-bar">
+		${bar1}
+		${bar2}
+	  </div>
+	  <div class="">out of ${displayTime(MINIMUM_TIME_TO_WORK, true)}</div>
+	</div>
+	`;
+}
 
 function drawTimeline(intervals) {
 	let html = '<div class="time-line">';
-
-	html += '<div class="interval-times">';
-	intervals.forEach((interval, i) => {
-		html += `<div style="width:${findWidthInterval(interval.interval, intervals[0].start)}px" class="interval-time">${displayTime(interval.interval, true)}</div>`;
-	});
-	html += '</div>';
 
 	html += '<div class="intervals">';
 	intervals.forEach((interval) => {
 		html += `<div class="interval" 
 		style="
 			width:${findWidthInterval(interval.interval, intervals[0].start)}px;
-			background-color: ${(interval.thisIsWork ? '#6ab04c' : '#f9ca24')}
+			background-color: ${(interval.thisIsWork ? WORK_COLOR : BREAK_COLOR)}
 		">
+		${displayTime(interval.interval, true)}
 		</div>`;
 	});
 	html += '</div>';

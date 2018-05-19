@@ -1,4 +1,4 @@
-const MINIMUM_TIME_TO_WORK = { hour: 7, min: 20, sign: '' };
+const MINIMUM_TIME_TO_WORK = { hour: 7, min: 20, sign: '', inMin: 440 };
 const TIMELINE_WIDTH = window.innerWidth - 30;
 const TIME_NOW = getRealTime();
 
@@ -84,14 +84,18 @@ function getRealTime() {
 function findWidthInterval(interval, start) {
 	let startToNowIntervalInMin = translateTimeToMin(subTime(TIME_NOW, start));
 	let w = interval.inMin / startToNowIntervalInMin * TIMELINE_WIDTH;
-	return Math.floor(w * 100) / 100;
+	return round(w);
 }
 
 function displayTime(time, isInterval) {
 	// interval -> 3h30min || 30min || 5min
 	// time -> 3:30 or 15:30 || 15:05
-	str = time.sign === '-' ? '- ' : '';
+	let str = '';
 	str += time.hour > 0 ? time.hour + (isInterval ? 'h' : ':') : '';
 	str += ((time.min < 9 && !isInterval) ? '0' + time.min : time.min) + (isInterval ? 'min' : '');
 	return str;
+}
+
+function round(number) {
+	return Math.floor(number * 100) / 100;
 }
