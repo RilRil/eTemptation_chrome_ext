@@ -10,6 +10,8 @@
             ],
             "js": [
                 "style.js",
+                "interval.js",
+                "time.js",
                 "lib.js",
                 "main.js"
             ],
