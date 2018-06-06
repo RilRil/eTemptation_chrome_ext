@@ -6,7 +6,7 @@
         {
             "matches": [
                 "file:///*/eTemp-chrome-ext/*",
-                "http://*/webquartz/eQuartz/*"
+                "http://*/webquartz/eQuartz/SF_WBA.HQ"
             ],
             "js": [
                 "style.js",
@@ -14,9 +14,6 @@
                 "time.js",
                 "lib.js",
                 "main.js"
-            ],
-            "css": [ 
-                "overrideStyles.css"
             ]
         }
     ]

@@ -3,8 +3,9 @@ const DEBUG = false;
 setTimeout(etempExt_load, 500);
 
 function etempExt_load() {
-	if (!document.querySelectorAll('.bargridwba').length)
+	if (!document.querySelectorAll('.bargridwba').length) {
 		return;
+	}
 
 	console.log('### eTemptation Chrome Extension loaded ###');
 
@@ -68,7 +69,7 @@ function etempExt_load() {
 		if (rest.sign === -1) {
 			// console.log('REMAINING')
 			timeHome = TIME_NOW.add(rest.abs());
-			let lastInterval = new Interval(TIME_NOW, timeHome, 'remaining'); 
+			let lastInterval = new Interval(TIME_NOW, timeHome, 'remaining');
 			lastInterval.setIcons('far fa-clock', 'fas fa-home');
 
 			allIntervals.push(new Interval(lastTally, TIME_NOW, 'break'));
@@ -86,7 +87,7 @@ function etempExt_load() {
 		if (rest.sign === -1) {
 			// console.log('REMAINING');
 			timeHome = TIME_NOW.add(rest.abs());
-			let lastInterval = new Interval(TIME_NOW, timeHome, 'remaining'); 
+			let lastInterval = new Interval(TIME_NOW, timeHome, 'remaining');
 			lastInterval.setIcons('far fa-clock', 'fas fa-home');
 
 			allIntervals.push(new Interval(lastTally, TIME_NOW, 'work'));
@@ -95,7 +96,7 @@ function etempExt_load() {
 			// console.log('OVERTIME');
 			timeHome = TIME_NOW;
 			let overtimeSince = TIME_NOW.sub(rest);
-			let lastInterval = new Interval(overtimeSince, TIME_NOW, 'overtime'); 
+			let lastInterval = new Interval(overtimeSince, TIME_NOW, 'overtime');
 			lastInterval.setIcons('fas fa-home', 'far fa-clock');
 
 			allIntervals.push(new Interval(lastTally, overtimeSince, 'work'));
@@ -126,6 +127,13 @@ function etempExt_load() {
 		</div>
 		`;
 	container.innerHTML = html;
+
+	let containerOpen = document.createElement('div');
+	containerOpen.classList = ['etemp-chrome-ext-open'];
+	containerOpen.addEventListener('click', etempExt_toggle);
+	containerOpen.innerHTML = `<div class="open-ext"><i class="fas fa-chevron-left"></i></div>`;
+
+	document.body.appendChild(containerOpen);
 	document.body.appendChild(container)
 }
 
@@ -134,7 +142,7 @@ function etempExt_getWorkBar(lTotalWorkTime, lTotalBreakTime, lRemainingMandator
 
 	let maxBreak = biggestBreak.toMin() > MINIMUM_TIME_BREAK.toMin() ? MINIMUM_TIME_BREAK : biggestBreak;
 	let totalTime = MINIMUM_TIME_TO_WORK_WITH_PAUSE;
-	
+
 	lTotalWorkTime.print('worked');
 	lTotalBreakTime.print('break');
 	lRemainingMandatoryBreakTime.print('remaining break time');
@@ -148,7 +156,8 @@ function etempExt_getWorkBar(lTotalWorkTime, lTotalBreakTime, lRemainingMandator
 	let remainsWidth = Math.abs(remainingTime.toMin()) / totalTime.toMin() * maxWidth;
 
 	let barWork = `<div class="bar work-bar-work" style="width: ${workWidth}px">${lTotalWorkTime.toString()}</div>`;
-	let barBreak = `<div class="bar work-bar-break" style="width: ${breakWidth}px">${maxBreak.toString()}</div>`;;
+	let barBreak = `<div class="bar work-bar-break" style="width: ${breakWidth}px">${maxBreak.toString()}</div>`;
+	;
 	let barRest = `<div class="bar work-bar-${remainingTime.type}" style="width: ${remainsWidth}px">${remainingTime.toString()}</div>`;
 
 	return `
@@ -158,7 +167,7 @@ function etempExt_getWorkBar(lTotalWorkTime, lTotalBreakTime, lRemainingMandator
 	  		${barWork}
 			${barRest}
 	  	</div>
-	  	<div class=""><span>out of ${MINIMUM_TIME_TO_WORK_WITH_PAUSE.toString()} (= with the 1h lunch break)</span></div>
+	  	<div class=""><span>out of ${MINIMUM_TIME_TO_WORK_WITH_PAUSE.toString()} (= with the 45m lunch break)</span></div>
 	</div>
 	`;
 }
@@ -183,7 +192,6 @@ function etempExt_getTimeLine(intervals, endOfDay) {
 		</div>`;
 	});
 	html += '</div>';
-
 
 	html += '<div class="start-times">';
 	intervals.forEach((interval, key) => {

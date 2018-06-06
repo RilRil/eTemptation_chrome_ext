@@ -5,8 +5,29 @@ const REMAINING_COLOR = '#eb4d4b';
 const OVERTIME_COLOR = '#22a6b3';
 const BORDER_COLOR = '#130f40';
 const CSS_CODE = `
+.btnbad {
+    margin-top: -40px;
+}
+
+.etemp-chrome-ext-open {
+	font-family: Arial;
+    font-size: 13px;
+    position: absolute;
+    z-index: 100;
+    bottom: 0;
+    left: 0;
+    width: 11px;
+    height: 150px;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    padding: 10px;
+}
+
 .etemp-chrome-ext {
    position: absolute;
+   z-index: 100;
    bottom: 0;
    left: 0;
    width: 100%;
@@ -18,12 +39,17 @@ const CSS_CODE = `
    color: #0f163e;
 }
 
+.etemp-chrome-ext .close-ext {
+	position: absolute;
+}
+
 .etemp-chrome-ext p {
     margin: 0;
     padding: 1px 0;
 }
 
 .etemp-chrome-ext .info {
+	position: relative;
     text-align: center;
     padding: 0 0 0 10px;
 }

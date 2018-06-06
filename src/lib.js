@@ -1,11 +1,13 @@
 
 const MINIMUM_TIME_TO_WORK = new Interval(440);
-const MINIMUM_TIME_TO_WORK_WITH_PAUSE = new Interval(500);
-const MINIMUM_TIME_BREAK = new Interval(60);
+const MINIMUM_TIME_TO_WORK_WITH_PAUSE = new Interval(485);
+const MINIMUM_TIME_BREAK = new Interval(45);
 const TIMELINE_WIDTH = window.innerWidth - 50;
 const TIME_NOW = etempExt_getRealTime();
-// const TIME_NOW = new Time(11, 0);
-// console.log('### ATTENTION IL EST ', TIME_NOW.toString(), ' ###');
+//const TIME_NOW = new Time(13, 10);
+//console.log('### ATTENTION IL EST ', TIME_NOW.toString(), ' ###');
+
+let isOpen = true;
 
 
 function etempExt_injectStuff() {
@@ -14,9 +16,17 @@ function etempExt_injectStuff() {
 	faTag.href = 'https://use.fontawesome.com/releases/v5.0.13/css/all.css';
 	document.getElementsByTagName('head')[0].appendChild(faTag);
 
+
+
+	// var css = document.createElement("style");
+	// css.innerHTML = OVERRIDE_CSS; // from override-styles.js
+	// document.body.appendChild(css);
+	
 	var css = document.createElement("style");
 	css.innerHTML = CSS_CODE; // from style.js
 	document.body.appendChild(css);
+
+
 }
 
 function etempExt_removeSpan(str) {
@@ -74,15 +84,16 @@ function round(number) {
 	return Math.floor(number * 100) / 100;
 }
 
-function getBackgroundColor(type) {
-	switch (type) {
-		case 'work':
-			return WORK_COLOR;
-		case 'break':
-			return BREAK_COLOR;
-		case 'remaining':
-			return REMAINING_COLOR;
-		case 'overtime':
-			return OVERTIME_COLOR;
+function etempExt_toggle() {
+	let els = document.getElementsByClassName('etemp-chrome-ext');
+	let icon = document.querySelectorAll('.etemp-chrome-ext-open i');
+	if (isOpen) {
+		icon[0].classList = ['fas fa-chevron-right'];
+		els[0].style.display = 'none';
+		isOpen = false;
+	} else {
+		icon[0].classList.value = ['fas fa-chevron-left'];
+		els[0].style.display = 'block';
+		isOpen = true;
 	}
 }
